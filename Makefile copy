@@ -1,0 +1,59 @@
+# Project Names
+NAME_SERVER = server
+NAME_CLIENT = client
+
+# Compiler and Flags
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
+# Libft Paths and Files
+LIBFT_PATH = ./libft
+LIBFT = ${LIBFT_PATH}/libft.a
+
+# Printf Paths and Files
+PRINTF_PATH = ./ft_printf
+PRINTF_LIB = ${PRINTF_PATH}/libftprintf.a
+
+# Source Files
+SRC_SERVER = server.c
+SRC_CLIENT = client.c
+
+# Object Files
+OBJ_SERVER = $(SRC_SERVER:.c=.o)
+OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+
+# All Target
+all: $(NAME_SERVER) $(NAME_CLIENT)
+
+# Server Target
+$(NAME_SERVER): $(OBJ_SERVER) $(LIBFT) $(PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJ_SERVER) $(LIBFT) $(PRINTF_LIB)
+
+# Client Target
+$(NAME_CLIENT): $(OBJ_CLIENT) $(LIBFT) $(PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJ_CLIENT) $(LIBFT) $(PRINTF_LIB)
+
+# Compile Libft
+$(LIBFT):
+	make -C $(LIBFT_PATH)
+
+# Compile the ft_printf library
+$(PRINTF_LIB):
+	@$(MAKE) -C $(PRINTF_PATH)
+
+# Clean Target
+clean:
+	rm -f $(OBJ_SERVER) $(OBJ_CLIENT)
+	make -C $(LIBFT_PATH) clean
+	@$(MAKE) -C $(PRINTF_PATH) clean
+
+# Full Clean Target
+fclean: clean
+	rm -f $(NAME_SERVER) $(NAME_CLIENT)
+	make -C $(LIBFT_PATH) fclean
+	@$(MAKE) -C $(PRINTF_PATH) fclean
+
+# Rebuild Target
+re: fclean all
+
+.PHONY: all clean fclean re
