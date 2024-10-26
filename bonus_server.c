@@ -6,13 +6,12 @@
 /*   By: taung <taung@student.42singapore.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 02:40:19 by taung             #+#    #+#             */
-/*   Updated: 2024/10/27 01:29:09 by taung            ###   ########.fr       */
+/*   Updated: 2024/10/27 00:47:54 by taung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./libft/libft.h"
 #include <signal.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -21,7 +20,6 @@ void	handle_signal(int sig, siginfo_t *info, void *context)
 	static int				bit_count = 0;
 	static unsigned char	character = 0;
 
-	(void)info;
 	(void)context;
 	if (sig == SIGUSR1)
 		character |= (1 << bit_count);
@@ -33,6 +31,7 @@ void	handle_signal(int sig, siginfo_t *info, void *context)
 			write(1, "\n", 1);
 		bit_count = 0;
 		character = 0;
+		kill(info->si_pid, SIGUSR1);
 	}
 }
 
